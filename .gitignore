@@ -170,3 +170,6 @@ test.ipynb
 
 # Streamlit
 .streamlit
+
+# FastLLM Model
+fllm/*.fllm

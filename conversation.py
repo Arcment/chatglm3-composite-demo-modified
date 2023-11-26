@@ -96,12 +96,12 @@ def preprocess_text(
         tools = json.dumps(tools, indent=4, ensure_ascii=False)
 
     prompt = f"{Role.SYSTEM}\n"
-    prompt += system if not tools else TOOL_PROMPT
+    prompt += f"{system}\n" if not tools else TOOL_PROMPT
     if tools:
         tools = json.loads(tools)
         prompt += json.dumps(tools, ensure_ascii=False)
     for conversation in history:
-        prompt += f'{conversation}'
+        prompt += f'{conversation}\n'
     prompt += f'{Role.ASSISTANT}\n'
     return prompt
 

@@ -10,8 +10,9 @@ st.set_page_config(
 
 import demo_chat, demo_ci, demo_tool
 
+# You are ChatGLM3, a large language model trained by Zhipu.AI. Follow the user's instructions carefully. Respond using markdown.
 DEFAULT_SYSTEM_PROMPT = '''
-You are ChatGLM3, a large language model trained by Zhipu.AI. Follow the user's instructions carefully. Respond using markdown.
+你是一个由智谱AI训练的大语言模型，名字叫ChatGLM3，请和用户进行对话，仔细完成用户的命令。使用Markdown格式进行回复。
 '''.strip()
 
 # Set the title of the demo

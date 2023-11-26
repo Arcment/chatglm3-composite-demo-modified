@@ -2,9 +2,12 @@
 
 ## 简介
 
-ChatGLM3官方提供了若干个demo，其中composite demo仅支持Python 3.10或更高的Python版本，这里对其进行了若干修改，使其兼容较低Python版本。Python3.8/3.9版本均可正常使用。此外，还在client中添加了QUANTIZE_BIT这一新参数，使其支持量化功能，默认使用8bit进行量化。
+【2023.11.25】ChatGLM3官方提供了若干个demo，其中composite demo仅支持Python 3.10或更高的Python版本，这里对其进行了若干修改，使其兼容较低Python版本。Python3.8/3.9版本均可正常使用。此外，还在client中添加了QUANTIZE_BIT这一新参数，使其支持量化功能，默认使用8bit进行量化。
 
-ChatGLM3官方仓库: https://github.com/THUDM/ChatGLM3.git
+【2023.11.26】支持使用FastLLM进行推理加速，在该框架的加持下模型回复速度大幅加快。如果要使用，查看FastLLM官方仓库了解安装方法。确保正确安装后，通过USE_FASTLLM参数控制是否开启加速。
+
++ ChatGLM3官方仓库: https://github.com/THUDM/ChatGLM3.git
++ FastLLM官方仓库：https://github.com/ztxz16/fastllm.git
 
 本代码在官方代码基础上修改，方便后续开发和研究。如果要进一步使用请阅读官方技术文档，并遵守官方规定。
 
