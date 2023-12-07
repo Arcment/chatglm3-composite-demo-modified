@@ -8,7 +8,7 @@ from typing import Any, Protocol, Optional, List, Tuple
 from huggingface_hub.inference._text_generation import TextGenerationStreamResponse, Token
 import streamlit as st
 import torch
-from transformers import AutoModel, AutoTokenizer, AutoConfig
+
 from transformers.generation.logits_process import LogitsProcessor
 from transformers.generation.utils import LogitsProcessorList
 
@@ -16,11 +16,17 @@ from conversation import Conversation
 
 TOOL_PROMPT = 'Answer the following questions as best as you can. You have access to the following tools:'
 
-MODEL_PATH = os.environ.get('MODEL_PATH', 'THUDM/chatglm3-6b')
+try:
+    from modelscope import AutoModel, AutoTokenizer, AutoConfig, snapshot_download
+    MODEL_PATH = snapshot_download('ZhipuAI/chatglm3-6b')
+except ModuleNotFoundError:
+    from transformers import AutoModel, AutoTokenizer, AutoConfig
+    MODEL_PATH = os.environ.get('MODEL_PATH', 'THUDM/chatglm3-6b')
+
 PT_PATH = os.environ.get('PT_PATH', None)
 TOKENIZER_PATH = os.environ.get("TOKENIZER_PATH", MODEL_PATH)
 QUANTIZE_BIT = os.environ.get("QUANTIZE_BIT", 8)
-USE_FASTLLM = os.environ.get("USE_FASTLLM", True)
+USE_FASTLLM = os.environ.get("USE_FASTLLM", False)
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 FLLM_DIR_PATH = 'fllm'
 
@@ -80,6 +86,7 @@ def stream_chat(self,
                 query: str, 
                 history: Optional[List[dict]]=None, 
                 role: str="user",
+                past_key_values=None,
                 max_length: int=8192, 
                 do_sample: bool=True,
                 top_p: float=0.8,

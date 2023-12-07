@@ -6,6 +6,8 @@
 
 【2023.11.26】支持使用FastLLM进行推理加速，在该框架的加持下模型回复速度大幅加快。如果要使用，查看FastLLM官方仓库了解安装方法。确保正确安装后，通过USE_FASTLLM参数控制是否开启加速。
 
+【2023.12.7】 修复bug。测试发现FastLLM虽然能大幅提升推理速度，但对ChatGLM3适配较差。暂时将其设置为默认关闭。
+
 + ChatGLM3官方仓库: https://github.com/THUDM/ChatGLM3.git
 + FastLLM官方仓库：https://github.com/ztxz16/fastllm.git
 
