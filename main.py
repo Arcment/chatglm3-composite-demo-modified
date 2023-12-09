@@ -1,4 +1,5 @@
 from enum import Enum
+from os import environ
 import streamlit as st
 
 st.set_page_config(
@@ -46,12 +47,22 @@ prompt_text = st.chat_input(
     key='chat_input',
 )
 
-tab = st.radio(
-    'Mode',
-    [mode.value for mode in Mode],
-    horizontal=True,
-    label_visibility='hidden',
-)
+if not environ.get('USE_FASTLLM'):
+    tab = st.radio(
+        'Mode',
+        [mode.value for mode in Mode],
+        horizontal=True,
+        label_visibility='hidden',
+    )
+else:
+    tab = st.radio(
+        'Mode',
+        [mode.value for mode in Mode],
+        key=Mode.CHAT,
+        horizontal=True,
+        label_visibility='hidden',
+        disabled=True,
+    )
 
 if tab == Mode.CHAT:
     demo_chat.main(top_p, temperature, system_prompt, prompt_text, repetition_penalty)
