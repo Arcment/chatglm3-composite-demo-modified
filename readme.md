@@ -8,6 +8,10 @@
 
 【2023.12.7】 修复bug。测试发现FastLLM虽然能大幅提升推理速度，但对ChatGLM3适配较差。暂时将其设置为默认关闭，如果手动启用FastLLM后，默认只支持聊天模式，不支持工具和代码解释模式。
 
+【2023.12.11】为了方便后续调试，将配置文件移到config.yaml中。
+
+【备注】模型本身规模仅为6B，经过量化等操作后精度再次受影响，能力很有限。如果要完成特定任务需要预先设计好Prompt进行测试，必要时参考官方文档进行微调。
+
 + ChatGLM3官方仓库: https://github.com/THUDM/ChatGLM3.git
 + FastLLM官方仓库：https://github.com/ztxz16/fastllm.git
 

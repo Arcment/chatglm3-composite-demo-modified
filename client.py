@@ -8,6 +8,7 @@ from typing import Any, Protocol, Optional, List, Tuple
 from huggingface_hub.inference._text_generation import TextGenerationStreamResponse, Token
 import streamlit as st
 import torch
+import yaml
 
 from transformers.generation.logits_process import LogitsProcessor
 from transformers.generation.utils import LogitsProcessorList
@@ -23,23 +24,29 @@ except ModuleNotFoundError:
     from transformers import AutoModel, AutoTokenizer, AutoConfig
     MODEL_PATH = os.environ.get('MODEL_PATH', 'THUDM/chatglm3-6b')
 
-PT_PATH = os.environ.get('PT_PATH', None)
-TOKENIZER_PATH = os.environ.get("TOKENIZER_PATH", MODEL_PATH)
-QUANTIZE_BIT = os.environ.get("QUANTIZE_BIT", 8)
-USE_FASTLLM = os.environ.get("USE_FASTLLM", False)
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-FLLM_DIR_PATH = 'fllm'
-
-TOKEN_DICT = {
-            'system': 64794,
-            'user': 64795,
-            'assistant': 64796,
-            'abservation': 64797
-}
+try:
+    with open('config.yaml', 'r') as f:
+        CONFIG = yaml.safe_load(f)
+        PT_PATH = CONFIG.get('pt_path', None)
+        TOKENIZER_PATH = CONFIG.get("tokenizer_path", MODEL_PATH)
+        QUANTIZE_BIT = CONFIG.get("quantize_bit", 8)
+        USE_FASTLLM = CONFIG.get('use_fastllm', False)
+        DEVICE = CONFIG.get('device', 'cuda' if torch.cuda.is_available() else 'cpu')
+        FLLM_DIR_PATH = CONFIG.get('fllm_dir_path', 'FLLM')
+        print(CONFIG)
+except:
+    print('fail to load config.')
+    PT_PATH = None
+    TOKENIZER_PATH = MODEL_PATH
+    QUANTIZE_BIT = 8
+    USE_FASTLLM = False
+    DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+    FLLM_DIR_PATH = 'fllm'
 
 try:
     from fastllm_pytools import llm
 except:
+    print('FastLLM is not available.')
     USE_FASTLLM = False
 
 # for Mac Computer like M1
@@ -59,6 +66,12 @@ except:
 # You Need Use Pytorch compiled with Musa
 # DEVICE = 'musa'
 
+TOKEN_DICT = {
+            'system': 64794,
+            'user': 64795,
+            'assistant': 64796,
+            'abservation': 64797
+}
 
 @st.cache_resource
 def get_client() -> Client:
@@ -222,6 +235,7 @@ def stream_chat_faster(faster_model: llm.model,
         cur = ""
         try:
             cur = ret.decode()
+            # print(f'(test)cur: {cur}') # test
             ret = b''
         except:
             fail_cnt += 1

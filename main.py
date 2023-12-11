@@ -1,3 +1,4 @@
+import yaml
 from enum import Enum
 from os import environ
 import streamlit as st
@@ -8,6 +9,14 @@ st.set_page_config(
     layout='centered',
     initial_sidebar_state='expanded',
 )
+
+try:
+    with open('config.yaml', 'r') as f:
+        CONFIG = yaml.safe_load(f)
+        USE_FASTLLM = CONFIG.get('use_fastllm', False)
+except:
+    print('fail to load config.')
+    USE_FASTLLM = False
 
 import demo_chat, demo_ci, demo_tool
 
@@ -47,7 +56,7 @@ prompt_text = st.chat_input(
     key='chat_input',
 )
 
-if not environ.get('USE_FASTLLM'):
+if not USE_FASTLLM:
     tab = st.radio(
         'Mode',
         [mode.value for mode in Mode],
