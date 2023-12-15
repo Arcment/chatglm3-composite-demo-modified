@@ -1,4 +1,4 @@
 quantize_bit: 8       # 量化位数 (4 / 8 / null) 根据个人电脑情况定
-use_fastllm: false    # 是否启用FastLLM (true/false)
+use_fastllm: false    # 是否启用FastLLM (true / false)
 fllm_dir_path: fllm   # FastLLM模型缓存位置
-device: cuda          # 设备 (cuda / cpu) 不建议使用CPU部署
+device: cuda          # 设备 (cuda / cpu / mps) 不建议使用CPU部署

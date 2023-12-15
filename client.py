@@ -265,6 +265,8 @@ class HFClient(Client):
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, trust_remote_code=True)
         self.use_fastllm = use_fastllm
 
+        assert DEVICE in ['cuda', 'cpu', 'mps'], 'Unsupport device.'
+
         if use_fastllm:
             assert 'llm' in globals(), 'FastLLM is not available.'
             print('FastLLM is available.')
@@ -277,6 +279,7 @@ class HFClient(Client):
             self.faster_model = AutoModel.from_pretrained(model_path, trust_remote_code=True)
             if quantize_bit is not None:
                 assert quantize_bit in [4, 8], 'Only support 4-bit and 8-bit quantize.'
+                assert DEVICE == 'cuda', 'Only support cuda device when using quantization module.'
                 self.faster_model = llm.from_hf(self.faster_model, self.tokenizer, dtype='int{}'.format(quantize_bit))
                 print('Use {}-bit quantized model.'.format(quantize_bit))
             else:
@@ -288,6 +291,7 @@ class HFClient(Client):
             config = AutoConfig.from_pretrained(model_path, trust_remote_code=True, pre_seq_len=128)
             if quantize_bit is not None:
                 assert quantize_bit in [4, 8], 'Only support 4-bit and 8-bit quantize.'
+                assert DEVICE == 'cuda', 'Only support cuda device when using quantization module.'
                 self.model = AutoModel.from_pretrained(model_path, trust_remote_code=True, config=config).quantize(quantize_bit)
                 print('Use {}-bit quantized model.'.format(quantize_bit))
             else:
@@ -303,6 +307,7 @@ class HFClient(Client):
         else:
             if quantize_bit is not None:
                 assert quantize_bit in [4, 8], 'Only support 4-bit and 8-bit quantize.'
+                assert DEVICE == 'cuda', 'Only support cuda device when using quantization module.'
                 self.model = AutoModel.from_pretrained(model_path, trust_remote_code=True).quantize(quantize_bit)
                 print('Use {}-bit quantized model.'.format(quantize_bit))
             else:
